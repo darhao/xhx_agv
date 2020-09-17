@@ -1,0 +1,50 @@
+<Configuration>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%level] %d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %l - %msg%n" />
+		</Console>
+
+		<JDBC name="JDBC" tableName="server_log">
+			<ThresholdFilter level="INFO" />
+			<ConnectionFactory
+				class="com.jimi.xhx_agv.db.DataSourceConfig"
+				method="getLog4j2JDBCAppenderConnection" />
+			<Column name="time" pattern="%d{yyyy-MM-dd HH:mm:ss:SSS}" />
+			<Column name="level" pattern="%level" />
+			<Column name="thread" pattern="%thread" />
+			<Column name="position" pattern="%l" />
+			<Column name="message" pattern="%msg" />
+			<Column name="server" pattern="2" />
+		</JDBC>
+
+		<!-- 此处邮箱配置信息可以自定义 -->
+		<SMTP name="SMTP" subject="新豪轩AGV服务器异常警告" from="darhao@qq.com"
+			to="darhao@qq.com" smtpHost="smtp.qq.com" smtpPort="465"
+			smtpUsername="darhao@qq.com" smtpPassword="gkermdqejmczbddi"
+			smtpDebug="false" smtpProtocol="smtps">
+			<ThresholdFilter level="ERROR" />
+		</SMTP>
+
+		<Async name="Async" bufferSize="65536">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="JDBC" />
+			<AppenderRef ref="SMTP" />
+		</Async>
+
+	</Appenders>
+
+	<!-- Level设置说明：
+		DEBUG：会输出所有来往数据及INFO等级的日志；
+		INFO：会输出所有连接与断开日志及WARN等级的日志（该等级默认会记录到数据库中）； 
+		WARN：会输出第三方错误的日志及ERROR等级的日志；
+		ERROR：会输出IO错误、非受检异常等日志；（该等级默认会发送到邮箱）
+	-->
+	<Loggers>
+		<Logger name="com.jimi" level="DEBUG" additivity="false">
+			<AppenderRef ref="Async" />
+		</Logger>
+	</Loggers>
+
+</Configuration>
