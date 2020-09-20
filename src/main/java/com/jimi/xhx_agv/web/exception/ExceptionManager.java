@@ -24,6 +24,7 @@ public class ExceptionManager {
 	static {
 		exceptionMap.put(OperationException.class, ResultCode.OPERATION_EXCEPTION_CODE);
 		exceptionMap.put(ParameterException.class, ResultCode.PARAMETER_EXCEPTION_CODE);
+		exceptionMap.put(ThirdPartException.class,ResultCode.THIRD_PARTY_EXCEPTION_CODE);
 		exceptionMap.put(AccessException.class,ResultCode.ACCESS_EXCEPTION_CODE);
 	}
 	

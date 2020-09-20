@@ -6,11 +6,14 @@ import com.jfinal.config.Interceptors;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
+import com.jfinal.json.MixedJsonFactory;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
 import com.jimi.xhx_agv.constant.SystemProperties;
 import com.jimi.xhx_agv.util.PropUtil;
+import com.jimi.xhx_agv.util.TokenBox;
+import com.jimi.xhx_agv.web.controller.AgvCallbackController;
 import com.jimi.xhx_agv.web.controller.LoadController;
 import com.jimi.xhx_agv.web.controller.UnloadController;
 import com.jimi.xhx_agv.web.controller.UserController;
@@ -31,6 +34,7 @@ public class UndertowBoot extends JFinalConfig {
 		int port = PropUtil.getInt(SystemProperties.FILE_NAME, SystemProperties.UNDERTOW_LISTEN_PORT);
 		undertowServer.setPort(port);
 		undertowServer.start();
+		TokenBox.start(0);
 	}
 	
 	
@@ -38,6 +42,7 @@ public class UndertowBoot extends JFinalConfig {
 		me.add("user", UserController.class);
 		me.add("unload", UnloadController.class);
 		me.add("load", LoadController.class);
+		me.add("agv", AgvCallbackController.class);
     }
 	
 	
@@ -51,7 +56,11 @@ public class UndertowBoot extends JFinalConfig {
     }
     
     
-    public void configConstant(Constants me) {}
+    public void configConstant(Constants me) {
+    	me.setJsonFactory(new MixedJsonFactory());
+    }
+    
+    
     public void configEngine(Engine me) {}
     public void configPlugin(Plugins me) {}
     public void configHandler(Handlers me) {}

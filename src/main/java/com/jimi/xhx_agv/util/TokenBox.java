@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cc.darhao.dautils.api.MD5Util;
+import com.jimi.xhx_agv.web.util.hik.CodeGenerate;
 
 /**
  * 用于保存会话信息，通过tokenId进行信息存取，自带超时检测线程
@@ -112,10 +112,10 @@ public class TokenBox {
 	
 	
 	/**
-	 * 创建一个随机的32位TokenId
+	 * 创建一个随机的15位TokenId
 	 */
 	public static String createTokenId() {
-		return MD5Util.MD5(new Date().getTime() + "Darhao");
+		return CodeGenerate.generate();
 	}
 	
 	

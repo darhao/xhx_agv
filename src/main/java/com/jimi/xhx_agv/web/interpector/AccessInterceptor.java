@@ -14,7 +14,7 @@ public class AccessInterceptor implements Interceptor {
     public void intercept(Invocation inv) {
         //接口权限限制
         String servletPath = inv.getController().getRequest().getServletPath();
-        if (servletPath.equals("/user/login")){
+        if (servletPath.equals("/user/login") || servletPath.equals("/agv/agvCallback")){
             inv.invoke();
             return;
         }

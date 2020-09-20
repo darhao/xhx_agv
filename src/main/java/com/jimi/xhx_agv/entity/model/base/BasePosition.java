@@ -18,6 +18,15 @@ public abstract class BasePosition<M extends BasePosition<M>> extends Model<M> i
 		return getInt("id");
 	}
 
+	public M setHikId(java.lang.String hikId) {
+		set("hik_id", hikId);
+		return (M)this;
+	}
+	
+	public java.lang.String getHikId() {
+		return getStr("hik_id");
+	}
+
 	public M setRow(java.lang.Integer row) {
 		set("row", row);
 		return (M)this;
@@ -54,40 +63,31 @@ public abstract class BasePosition<M extends BasePosition<M>> extends Model<M> i
 		return getInt("type");
 	}
 
-	public M setHasShelves(java.lang.Integer hasShelves) {
-		set("has_shelves", hasShelves);
+	public M setGoodsState(java.lang.Integer goodsState) {
+		set("goods_state", goodsState);
 		return (M)this;
 	}
 	
-	public java.lang.Integer getHasShelves() {
-		return getInt("has_shelves");
+	public java.lang.Integer getGoodsState() {
+		return getInt("goods_state");
 	}
 
-	public M setHasGoods(java.lang.Integer hasGoods) {
-		set("has_goods", hasGoods);
+	public M setLastTransportTime(java.util.Date lastTransportTime) {
+		set("last_transport_time", lastTransportTime);
 		return (M)this;
 	}
 	
-	public java.lang.Integer getHasGoods() {
-		return getInt("has_goods");
+	public java.util.Date getLastTransportTime() {
+		return get("last_transport_time");
 	}
 
-	public M setLoadGoodsTime(java.util.Date loadGoodsTime) {
-		set("load_goods_time", loadGoodsTime);
-		return (M)this;
-	}
-	
-	public java.util.Date getLoadGoodsTime() {
-		return get("load_goods_time");
-	}
-
-	public M setIsLock(java.lang.Integer isLock) {
+	public M setIsLock(java.lang.Boolean isLock) {
 		set("is_lock", isLock);
 		return (M)this;
 	}
 	
-	public java.lang.Integer getIsLock() {
-		return getInt("is_lock");
+	public java.lang.Boolean getIsLock() {
+		return get("is_lock");
 	}
 
 }

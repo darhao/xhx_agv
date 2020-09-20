@@ -15,4 +15,8 @@ public class SystemProperties {
 	public final static String P_MYSQL_PASSWORD = "p_password";
 
 	public final static String UNDERTOW_LISTEN_PORT = "undertowListenPort";
+	
+	public final static String HIK_URL = "hikUrl";
+
+	public static final String HIK_TASK_TYPE = "hikTaskType";
 }

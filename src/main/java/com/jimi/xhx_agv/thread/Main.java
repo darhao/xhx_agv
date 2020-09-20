@@ -8,6 +8,7 @@ import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
 
 import com.jimi.xhx_agv.db.DataSourceConfig;
+import com.jimi.xhx_agv.util.TokenBox;
 import com.jimi.xhx_agv.web.UndertowBoot;
 
 import sun.misc.Signal;
@@ -21,6 +22,7 @@ public class Main implements SignalHandler {
 	
 	private DataSourceConfig dataSourceConfig = new DataSourceConfig();
 	private UndertowBoot undertowBoot = new UndertowBoot();
+	private AreaTransportor areaTransportor = new AreaTransportor();
 	
 	
 	public static void main(String[] args) throws Exception {
@@ -45,8 +47,10 @@ public class Main implements SignalHandler {
 	private void start() {
 		try {
 			dataSourceConfig.start();
+			areaTransportor.start();
 			undertowBoot.start();
-			logger.info("心晓设备服务已成功开启");
+			areaTransportor.start();
+			logger.info("新豪轩AGV服务已成功开启");
 		} catch (Throwable e) {
 			e.printStackTrace();
 			System.err.println("程序异常结束");
@@ -63,10 +67,12 @@ public class Main implements SignalHandler {
 		}
 		killed = true;
 		try {
+			TokenBox.stop();
+			areaTransportor.shutdown();
 			System.out.println("正在等待异步日志记录...");
 			LogManager.shutdown();
 			initLogger();
-			logger.info("心晓设备服务已安全关闭");
+			logger.info("新豪轩AGV服务已安全关闭");
 			dataSourceConfig.shutdown();
 			System.out.println("程序正常结束");
 			System.exit(0);

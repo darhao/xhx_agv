@@ -20,5 +20,10 @@ public class LockInterceptor implements Interceptor {
         	inv.invoke();
 		}
     }
+    
+    
+    public static Object getLock() {
+    	return SHERLOCK;
+    }
 
 }
