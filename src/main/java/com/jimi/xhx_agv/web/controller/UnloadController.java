@@ -11,9 +11,9 @@ public class UnloadController extends Controller {
 	private UnloadService unloadService = Aop.get(UnloadService.class);
 	
 	
-    @Log("获取卸载区所有位置")
-    public void listAllPositions() {
-    	renderJson(unloadService.listAllPositions());
+    @Log("获取卸载区所有空卸载位和有货物的存储位")
+    public void listAllEmptyUnloadAndHaveGoodsStorePositions() {
+    	renderJson(unloadService.listAllEmptyUnloadAndHaveGoodsStorePositions());
     }
     
     
@@ -23,6 +23,12 @@ public class UnloadController extends Controller {
     		throw new ParameterException("参数不能为空");
     	}
     	renderJson(unloadService.callFullShelves(storePosition, unloadPosition));
+    }
+    
+    
+    @Log("获取所有非空卸载位")
+    public void listAllNotEmptyUnloadPositions() {
+    	renderJson(unloadService.listAllNotEmptyUnloadPositions());
     }
     
     

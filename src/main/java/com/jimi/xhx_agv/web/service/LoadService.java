@@ -15,13 +15,14 @@ import com.jimi.xhx_agv.web.util.AgvCaller;
 
 public class LoadService {
 
-    public Result listAllLoadPositions() {
+    public Result listAllEmptyLoadPositions() {
     	List<JSONObject> result = new LinkedList<>();
     	List<Position> positions = Position.dao.find(SQL.LIST_ALL_LOAD_POSITIONS);
     	for (Position position : positions) {
 			//无货架且未锁定的标记为可用，其他标记为不可用
     		JSONObject object = new JSONObject();
     		object.put("id", position.getId());
+    		object.put("name", position.getName());
     		if(position.getGoodsState() == 0 && position.getIsLock() == false) {
     			object.put("available", true);
     		}else {
@@ -54,6 +55,25 @@ public class LoadService {
     	//设置工作状态
     	WorkStateHolder.setLoadAreaWork(true);
     	return ResultFactory.succeed();
+    }
+    
+    
+    public Result listAllNotEmptyLoadPositions() {
+    	List<JSONObject> result = new LinkedList<>();
+    	List<Position> positions = Position.dao.find(SQL.LIST_ALL_LOAD_POSITIONS);
+    	for (Position position : positions) {
+			//有非空货架且未锁定的标记为可用，其他标记为不可用
+    		JSONObject object = new JSONObject();
+    		object.put("id", position.getId());
+    		object.put("name", position.getName());
+    		if(position.getGoodsState() == 2 && position.getIsLock() == false) {
+    			object.put("available", true);
+    		}else {
+    			object.put("available", false);
+    		}
+    		result.add(object);
+		}
+		return ResultFactory.succeed(result);
     }
     
     

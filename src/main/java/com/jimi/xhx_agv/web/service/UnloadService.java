@@ -15,7 +15,7 @@ import com.jimi.xhx_agv.web.util.AgvCaller;
 
 public class UnloadService {
 
-    public Result listAllPositions() {
+    public Result listAllEmptyUnloadAndHaveGoodsStorePositions() {
     	List<JSONObject> result = new LinkedList<>();
     	List<Position> positions = Position.dao.find(SQL.LIST_ALL_UNLOAD_AREA_POSITIONS);
     	for (Position position : positions) {
@@ -23,8 +23,7 @@ public class UnloadService {
     		//其他标记为不可用
     		JSONObject object = new JSONObject();
     		object.put("id", position.getId());
-    		object.put("row", position.getRow());
-    		object.put("col", position.getCol());
+    		object.put("name", position.getName());
     		object.put("type", position.getType() == 0 ? "unload" : "store");
     		if((position.getType() == 0 && position.getGoodsState() == 0 && position.getIsLock() == false)
     				|| (position.getType() == 1 && position.getGoodsState() == 2 && position.getIsLock() == false)) {
@@ -62,7 +61,26 @@ public class UnloadService {
     }
     
     
-    public Result sendShelvesBack(Integer unloadPosition) {
+    public Result listAllNotEmptyUnloadPositions() {
+    	List<JSONObject> result = new LinkedList<>();
+    	List<Position> positions = Position.dao.find(SQL.LIST_ALL_UNLOAD_AREA_POSITIONS);
+    	for (Position position : positions) {
+			//标记为可用的有：位置为装卸类型且有非空货架且未锁定
+    		JSONObject object = new JSONObject();
+    		object.put("id", position.getId());
+    		object.put("name", position.getName());
+    		if((position.getType() == 0 && position.getGoodsState() == 2 && position.getIsLock() == false)) {
+    			object.put("available", true);
+    		}else {
+    			object.put("available", false);
+    		}
+    		result.add(object);
+		}
+		return ResultFactory.succeed(result);
+	}
+
+
+	public Result sendShelvesBack(Integer unloadPosition) {
     	//判断ulp有效性
     	Position ulp = Position.dao.findById(unloadPosition);
     	if(ulp.getArea() != 1 || ulp.getType() != 0 || ulp.getGoodsState() == 0 || ulp.getIsLock() != false) {

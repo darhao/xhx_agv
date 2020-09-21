@@ -11,9 +11,9 @@ public class LoadController extends Controller {
     private LoadService loadService = Aop.get(LoadService.class);
 
     
-    @Log("获取所有装载位")
-    public void listAllLoadPositions() {
-    	renderJson(loadService.listAllLoadPositions());
+    @Log("获取所有空装载位")
+    public void listAllEmptyLoadPositions() {
+    	renderJson(loadService.listAllEmptyLoadPositions());
     }
     
     
@@ -23,6 +23,12 @@ public class LoadController extends Controller {
     		throw new ParameterException("参数不能为空");
     	}
     	renderJson(loadService.callEmptyShelves(loadPosition));
+    }
+    
+    
+    @Log("获取所有非空装载位")
+    public void listAllNotEmptyLoadPositions() {
+    	renderJson(loadService.listAllNotEmptyLoadPositions());
     }
     
     

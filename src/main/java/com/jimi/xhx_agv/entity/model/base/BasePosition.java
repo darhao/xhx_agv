@@ -27,22 +27,13 @@ public abstract class BasePosition<M extends BasePosition<M>> extends Model<M> i
 		return getStr("hik_id");
 	}
 
-	public M setRow(java.lang.Integer row) {
-		set("row", row);
+	public M setName(java.lang.String name) {
+		set("name", name);
 		return (M)this;
 	}
 	
-	public java.lang.Integer getRow() {
-		return getInt("row");
-	}
-
-	public M setCol(java.lang.Integer col) {
-		set("col", col);
-		return (M)this;
-	}
-	
-	public java.lang.Integer getCol() {
-		return getInt("col");
+	public java.lang.String getName() {
+		return getStr("name");
 	}
 
 	public M setArea(java.lang.Integer area) {
