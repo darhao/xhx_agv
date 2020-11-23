@@ -34,15 +34,16 @@ public class SchedulingTaskPackage extends BaseRequestPackage {
 	private String podType;
 	private String materialLot;
 	private String priority;
-	private String robotCode;
+	private String taskCode;
 	private String agvCode;
 	private String data;
 
-	public SchedulingTaskPackage(String id, String taskTyp, String wbCode, List<String> positionCodePath, String priority) {
-		super(id);
+	public SchedulingTaskPackage(String taskCode, String taskTyp, String wbCode, List<String> positionCodePath, String priority) {
+		super(CodeGenerate.generate());
 		this.taskTyp = taskTyp;
 		this.wbCode = wbCode;
 		this.priority = priority;
+		this.taskCode = taskCode;
 		this.positionCodePath = new LinkedList<>();
 		for (String string : positionCodePath) {
 			Position position = new Position();
@@ -116,14 +117,6 @@ public class SchedulingTaskPackage extends BaseRequestPackage {
 		this.priority = priority;
 	}
 
-	public String getRobotCode() {
-		return robotCode;
-	}
-
-	public void setRobotCode(String robotCode) {
-		this.robotCode = robotCode;
-	}
-
 	public String getAgvCode() {
 		return agvCode;
 	}
@@ -138,6 +131,14 @@ public class SchedulingTaskPackage extends BaseRequestPackage {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+
+	public String getTaskCode() {
+		return taskCode;
+	}
+
+	public void setTaskCode(String taskCode) {
+		this.taskCode = taskCode;
 	}
 
 }

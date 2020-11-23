@@ -63,13 +63,13 @@ public abstract class BasePosition<M extends BasePosition<M>> extends Model<M> i
 		return getInt("goods_state");
 	}
 
-	public M setLastTransportTime(java.util.Date lastTransportTime) {
-		set("last_transport_time", lastTransportTime);
+	public M setLoadGoodTime(java.util.Date loadGoodTime) {
+		set("load_good_time", loadGoodTime);
 		return (M)this;
 	}
 	
-	public java.util.Date getLastTransportTime() {
-		return get("last_transport_time");
+	public java.util.Date getLoadGoodTime() {
+		return get("load_good_time");
 	}
 
 	public M setIsLock(java.lang.Boolean isLock) {

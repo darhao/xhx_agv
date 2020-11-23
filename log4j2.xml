@@ -16,7 +16,6 @@
 			<Column name="thread" pattern="%thread" />
 			<Column name="position" pattern="%l" />
 			<Column name="message" pattern="%msg" />
-			<Column name="server" pattern="2" />
 		</JDBC>
 
 		<!-- 此处邮箱配置信息可以自定义 -->
@@ -30,7 +29,7 @@
 		<Async name="Async" bufferSize="65536">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="JDBC" />
-			<AppenderRef ref="SMTP" />
+			<!--  <AppenderRef ref="SMTP" />-->
 		</Async>
 
 	</Appenders>

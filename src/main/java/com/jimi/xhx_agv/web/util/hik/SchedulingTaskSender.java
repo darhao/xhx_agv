@@ -25,14 +25,14 @@ public class SchedulingTaskSender {
    * @return 服务器应答结果：{"code":"返回码","message":"返回消息","reqcode":"请求编号,"data":"自定义返回"}
    * @throws Exception 如果连接失败抛出
    */
-  public static String request(String url, String id, String taskTyp, String start, String end, String priority) throws Exception{
+  public static String request(String url, String taskCode, String taskTyp, String start, String end, String priority) throws Exception{
     if (url == null || start == null ||end ==null || priority == null){
       throw new NullPointerException("参数不能为null");
     }
     List<String> userCallCodePath = new ArrayList<>();
     userCallCodePath.add(start);
     userCallCodePath.add(end);
-    SchedulingTaskPackage task = new SchedulingTaskPackage(id, taskTyp,null,userCallCodePath, priority);
+    SchedulingTaskPackage task = new SchedulingTaskPackage(taskCode, taskTyp,null,userCallCodePath, priority);
     return HttpPost.send(url, JSONObject.toJSONString(task));
   }
 

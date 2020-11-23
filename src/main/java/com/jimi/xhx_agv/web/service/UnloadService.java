@@ -1,5 +1,6 @@
 package com.jimi.xhx_agv.web.service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,17 +17,19 @@ import com.jimi.xhx_agv.web.util.AgvCaller;
 public class UnloadService {
 
     public Result listAllEmptyUnloadAndHaveGoodsStorePositions() {
+    	Date now = new Date();
     	List<JSONObject> result = new LinkedList<>();
     	List<Position> positions = Position.dao.find(SQL.LIST_ALL_UNLOAD_AREA_POSITIONS);
     	for (Position position : positions) {
-			//标记为可用的有：1、位置为装卸类型且无货架且未锁定；2、位置为存储类型且有非空货架且未锁定
+			//标记为可用的有：1、位置为装卸类型且无货架且未锁定；2、位置为存储类型且有非空货架且冷却2小时且未锁定
     		//其他标记为不可用
     		JSONObject object = new JSONObject();
     		object.put("id", position.getId());
     		object.put("name", position.getName());
     		object.put("type", position.getType() == 0 ? "unload" : "store");
     		if((position.getType() == 0 && position.getGoodsState() == 0 && position.getIsLock() == false)
-    				|| (position.getType() == 1 && position.getGoodsState() == 2 && position.getIsLock() == false)) {
+    				|| (position.getType() == 1 && position.getGoodsState() == 2 && position.getIsLock() == false 
+    				&&  now.getTime() >= position.getLoadGoodTime().getTime() + 2*3600*1000)) {
     			object.put("available", true);
     		}else {
     			object.put("available", false);
@@ -40,18 +43,20 @@ public class UnloadService {
     public Result callFullShelves(Integer storePosition, Integer unloadPosition) {
     	//判断ulp有效性
     	Position ulp = Position.dao.findById(unloadPosition);
-    	if(ulp.getArea() != 1 || ulp.getType() != 0 || ulp.getGoodsState() != 0 || ulp.getIsLock() != false) {
+    	if(ulp == null || ulp.getArea() != 1 || ulp.getType() != 0 || ulp.getGoodsState() != 0 || ulp.getIsLock() != false) {
     		throw new ParameterException("参数不是有效的卸载位置");
     	}
     	//判断fp的有效性
     	Position fp = Position.dao.findById(storePosition);
-    	if(ulp.getArea() != 1 || ulp.getType() != 1 || ulp.getGoodsState() != 2 || ulp.getIsLock() != false) {
+    	if(fp == null || fp.getArea() != 1 || fp.getType() != 1 || fp.getGoodsState() != 2 || fp.getIsLock() != false 
+    			|| new Date().getTime() < fp.getLoadGoodTime().getTime() + 2*3600*1000) {
     		throw new OperationException("参数不是有效的非空货架存储位置");
     	}
     	//呼叫
     	AgvCaller.transport(fp, ulp, 2);
     	//更新ep，lp的数据库记录，锁定
     	fp.setIsLock(true);
+    	fp.setLoadGoodTime(null);
     	ulp.setIsLock(true);
     	fp.update();
     	ulp.update();
@@ -63,7 +68,7 @@ public class UnloadService {
     
     public Result listAllNotEmptyUnloadPositions() {
     	List<JSONObject> result = new LinkedList<>();
-    	List<Position> positions = Position.dao.find(SQL.LIST_ALL_UNLOAD_AREA_POSITIONS);
+    	List<Position> positions = Position.dao.find(SQL.LIST_ALL_UNLOAD_AREA_UNLOAD_POSITIONS);
     	for (Position position : positions) {
 			//标记为可用的有：位置为装卸类型且有非空货架且未锁定
     		JSONObject object = new JSONObject();
@@ -83,7 +88,7 @@ public class UnloadService {
 	public Result sendShelvesBack(Integer unloadPosition) {
     	//判断ulp有效性
     	Position ulp = Position.dao.findById(unloadPosition);
-    	if(ulp.getArea() != 1 || ulp.getType() != 0 || ulp.getGoodsState() == 0 || ulp.getIsLock() != false) {
+    	if(ulp == null || ulp.getArea() != 1 || ulp.getType() != 0 || ulp.getGoodsState() == 0 || ulp.getIsLock() != false) {
     		throw new ParameterException("参数不是有效的卸载位置");
     	}
     	//寻找卸载区空的存储位置

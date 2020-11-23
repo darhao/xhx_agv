@@ -58,6 +58,7 @@ public class UndertowBoot extends JFinalConfig {
     
     public void configConstant(Constants me) {
     	me.setJsonFactory(new MixedJsonFactory());
+    	me.setToCglibProxyFactory();
     }
     
     

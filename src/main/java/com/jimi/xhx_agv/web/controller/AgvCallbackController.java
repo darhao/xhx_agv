@@ -27,8 +27,9 @@ public class AgvCallbackController extends Controller {
 		//反序列化
 		JSONObject callbackJson = JSON.parseObject(getRawData());
 		String method = callbackJson.getString("method");
-		String id = callbackJson.getString("reqCode");
-		String data = TaskHolder.get(id);
+		String taskCode = callbackJson.getString("taskCode");
+		String data = TaskHolder.get(taskCode);
+		System.out.println("收:" +data);
 		if(data != null) {
 			//记录日志
 			AgvLog agvLog = new AgvLog();
@@ -38,7 +39,7 @@ public class AgvCallbackController extends Controller {
 			//处理结束的任务
 			if(method.equals("end")) {
 				try {
-					agvCallbackService.agvCallback(id, data);
+					agvCallbackService.agvCallback(taskCode, data);
 				} catch (Exception e) {
 					ExceptionLogger.logError(logger, e);
 				}
@@ -48,7 +49,7 @@ public class AgvCallbackController extends Controller {
 		JSONObject resp = new JSONObject();
 		resp.put("code", "0");
 		resp.put("message", "成功");
-		resp.put("reqCode", id);
+		resp.put("reqCode", callbackJson.getString("reqCode"));
 		resp.put("data", "");
 		renderJson(resp);
 	}

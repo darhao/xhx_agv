@@ -1,5 +1,6 @@
 package com.jimi.xhx_agv.web.service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class LoadService {
     public Result callEmptyShelves(Integer loadPosition) {
     	//判断lp有效性
     	Position lp = Position.dao.findById(loadPosition);
-    	if(lp.getArea() != 0 || lp.getType() != 0 || lp.getGoodsState() != 0 || lp.getIsLock() != false) {
+    	if(lp == null || lp.getArea() != 0 || lp.getType() != 0 || lp.getGoodsState() != 0 || lp.getIsLock() != false) {
     		throw new ParameterException("参数不是有效的装载位置");
     	}
     	//寻找装载区空货架存储位置
@@ -66,7 +67,7 @@ public class LoadService {
     		JSONObject object = new JSONObject();
     		object.put("id", position.getId());
     		object.put("name", position.getName());
-    		if(position.getGoodsState() == 2 && position.getIsLock() == false) {
+    		if(position.getGoodsState() == 1 && position.getIsLock() == false) {
     			object.put("available", true);
     		}else {
     			object.put("available", false);
@@ -80,7 +81,7 @@ public class LoadService {
     public Result sendShelvesBack(Integer loadPosition) {
     	//判断lp有效性
     	Position lp = Position.dao.findById(loadPosition);
-    	if(lp.getArea() != 0 || lp.getType() != 0 || lp.getGoodsState() == 0 || lp.getIsLock() != false) {
+    	if(lp == null || lp.getArea() != 0 || lp.getType() != 0 || lp.getGoodsState() == 0 || lp.getIsLock() != false) {
     		throw new ParameterException("参数不是有效的装载位置");
     	}
     	//寻找装载区空的存储位置
@@ -93,6 +94,7 @@ public class LoadService {
     	//更新ep，lp的数据库记录，锁定
     	ep.setIsLock(true);
     	lp.setGoodsState(2);//设置有非空货架的状态
+    	lp.setLoadGoodTime(new Date());
     	lp.setIsLock(true);
     	ep.update();
     	lp.update();

@@ -49,7 +49,6 @@ public class Main implements SignalHandler {
 			dataSourceConfig.start();
 			areaTransportor.start();
 			undertowBoot.start();
-			areaTransportor.start();
 			logger.info("新豪轩AGV服务已成功开启");
 		} catch (Throwable e) {
 			e.printStackTrace();

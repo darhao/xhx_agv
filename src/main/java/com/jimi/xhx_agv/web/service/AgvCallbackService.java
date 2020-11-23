@@ -14,13 +14,13 @@ public class AgvCallbackService {
 		if(sp == null || ep == null) {
 			return;
 		}
-		//交换货物状态，更新上次搬运时间，解锁
+		//交换货物状态，装货时间，解锁
 		int temp = sp.getGoodsState();
 		sp.setGoodsState(ep.getGoodsState());
 		ep.setGoodsState(temp);
-		Date now = new Date();
-		sp.setLastTransportTime(now);
-		ep.setLastTransportTime(now);
+		Date temp2 = sp.getLoadGoodTime();
+		sp.setLoadGoodTime(ep.getLoadGoodTime());
+		ep.setLoadGoodTime(temp2);
 		sp.setIsLock(false);
 		ep.setIsLock(false);
 		sp.update();

@@ -14,8 +14,9 @@ public class UserService {
 		if(u == null) {
 			throw new OperationException("用户名或密码错误");
 		}
-		TokenBox.put(TokenBox.createTokenId(), "userId", u.getId());
-		return ResultFactory.succeed();
+		String tokenId = TokenBox.createTokenId();
+		TokenBox.put(tokenId, "userId", u.getId());
+		return ResultFactory.succeed(tokenId);
 	}
 	
 }

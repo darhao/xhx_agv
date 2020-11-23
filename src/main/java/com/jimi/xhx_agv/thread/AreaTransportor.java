@@ -51,8 +51,8 @@ public class AreaTransportor implements UncaughtExceptionHandler{
 		if(WorkStateHolder.isLoadAreaWork() || WorkStateHolder.isUnloadAreaWork()) {
 			return;
 		}
-		//获取所有装载区转载时间超过2小时货物的位置tps
-		List<Position> coldDownGoodsPositions = Position.dao.find(SQL.GET_ALL_COLD_DOWN_GOODS_POSITION);
+		//获取所有装载区货物的位置tps
+		List<Position> coldDownGoodsPositions = Position.dao.find(SQL.GET_ALL_HAVE_GOODS_STORE_POSITION_FROM_LOAD_AREA);
 		for (Position cdp : coldDownGoodsPositions) {
 			//获取一个卸载区的存储空位
 			Position ep = Position.dao.findFirst(SQL.GET_A_EMPTY_STORE_POSITION_FROM_UNLOAD_AREA);

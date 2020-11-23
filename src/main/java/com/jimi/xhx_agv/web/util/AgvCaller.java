@@ -25,8 +25,8 @@ public class AgvCaller {
 			String url = PropUtil.getString(SystemProperties.FILE_NAME, SystemProperties.HIK_URL);
 			String taskType = PropUtil.getString(SystemProperties.FILE_NAME, SystemProperties.HIK_TASK_TYPE);
 			String data = start.getId() + "->" + end.getId();
-			String id = CodeGenerate.generate();
-			String taskRep = SchedulingTaskSender.request(url, id, taskType, start.getHikId(), end.getHikId(), 
+			String taskCode = CodeGenerate.generate();
+			String taskRep = SchedulingTaskSender.request(url, taskCode, taskType, start.getHikId(), end.getHikId(), 
 					String.valueOf(priority));
 			String code = JSON.parseObject(taskRep).getString("code");
 			if (!code.equals("0")) {
@@ -34,11 +34,12 @@ public class AgvCaller {
 				throw new ThirdPartException(message);
 			}
 			//记录任务缓存
-			TaskHolder.add(id, data);
+			TaskHolder.add(taskCode, data);
 			//记录日志
 			AgvLog agvLog = new AgvLog();
 			agvLog.setTime(new Date());
 			agvLog.setMessage("成功下达搬运指令：" + data + "，优先级：" + priority);
+			System.out.println("发:" + data);
 			agvLog.save();
 		} catch (Exception e) {
 			throw new ThirdPartException(e.getMessage());
